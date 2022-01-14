@@ -58,16 +58,40 @@
 		6DBEF29327917A7E00C35344 /* OneDayTodo */ = {
 			isa = PBXGroup;
 			children = (
+				6DBEF2AC27917F5B00C35344 /* Controller */,
+				6DBEF2AD27917F6700C35344 /* View */,
+				6DBEF2AB27917F4F00C35344 /* Model */,
 				6DBEF29427917A7E00C35344 /* AppDelegate.swift */,
 				6DBEF29627917A7E00C35344 /* SceneDelegate.swift */,
-				6DBEF29827917A7E00C35344 /* ViewController.swift */,
-				6DBEF29A27917A7F00C35344 /* Main.storyboard */,
 				6DBEF2A027917A8000C35344 /* Assets.xcassets */,
 				6DBEF2A227917A8000C35344 /* LaunchScreen.storyboard */,
 				6DBEF2A527917A8000C35344 /* Info.plist */,
 				6DBEF29D27917A7F00C35344 /* OneDayTodo.xcdatamodeld */,
 			);
 			path = OneDayTodo;
+			sourceTree = "<group>";
+		};
+		6DBEF2AB27917F4F00C35344 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		6DBEF2AC27917F5B00C35344 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				6DBEF29827917A7E00C35344 /* ViewController.swift */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		6DBEF2AD27917F6700C35344 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				6DBEF29A27917A7F00C35344 /* Main.storyboard */,
+			);
+			path = View;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
