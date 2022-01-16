@@ -11,7 +11,7 @@ import CoreData
 
 
 class ViewController: UIViewController {
-
+    var testmodel1 = testModel()
     @IBOutlet weak var todoTableView: UITableView!
     
     override func viewDidLoad() {
@@ -30,26 +30,30 @@ class ViewController: UIViewController {
         
         
         
-        var test = [Test]()
-        let appdelegate = UIApplication.shared.delegate as! AppDelegate
-        let fetchRequest: NSFetchRequest<Test> = Test.fetchRequest()
+//        var test = [Test]()
+//        let appdelegate = UIApplication.shared.delegate as! AppDelegate
+//        let fetchRequest: NSFetchRequest<Test> = Test.fetchRequest()
         
-        let context = appdelegate.persistentContainer.viewContext
-         
-         do {
-             //
-             test = try context.fetch(fetchRequest)
-             
-             print(test.count)
-             print("aa")
-         }catch {
-             printContent(error)
-         }
+//        let context = appdelegate.persistentContainer.viewContext
+//
+//         do {
+//             //
+//             test = try context.fetch(fetchRequest)
+//
+//             print(test.count)
+//             print("aa")
+//         }catch {
+//             printContent(error)
+//         }
+//
+//
+//
+//        testmodel1.test = test
+//        print(testmodel1)
+//
         
         
-        var testmodel1 = testModel()
-        testmodel1.test = test
-        print(testmodel1)
+        
         
     }
     
