@@ -20,24 +20,39 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="습관더하기" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6Bt-5K-cZM">
-                    <rect key="frame" x="40" y="124" width="74" height="21"/>
+                    <rect key="frame" x="40" y="188" width="74" height="21"/>
                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                     <nil key="textColor"/>
                     <nil key="highlightedColor"/>
                 </label>
                 <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="lRp-Qv-84X">
-                    <rect key="frame" x="20" y="195" width="374" height="34"/>
+                    <rect key="frame" x="20" y="259" width="374" height="34"/>
                     <color key="tintColor" systemColor="labelColor"/>
                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                     <textInputTraits key="textInputTraits"/>
                 </textField>
-                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VPM-Cm-jO2">
-                    <rect key="frame" x="183" y="283" width="49" height="31"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MYT-Pv-PFh">
+                    <rect key="frame" x="157" y="343" width="100" height="50"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="100" id="SnL-hE-blv"/>
+                        <constraint firstAttribute="height" constant="50" id="XIf-rn-WaS"/>
+                    </constraints>
                     <state key="normal" title="Button"/>
-                    <buttonConfiguration key="configuration" style="plain" title="test"/>
+                    <buttonConfiguration key="configuration" style="plain" title="더하기"/>
                     <connections>
-                        <action selector="testAction:" destination="-1" eventType="touchUpInside" id="VYz-v7-c26"/>
+                        <action selector="saveTodo:" destination="-1" eventType="touchUpInside" id="EEO-OT-GIx"/>
+                    </connections>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JuF-6A-a6y">
+                    <rect key="frame" x="157" y="433" width="100" height="50"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="100" id="9zL-1s-x0W"/>
+                        <constraint firstAttribute="height" constant="50" id="Scw-lP-LSm"/>
+                    </constraints>
+                    <state key="normal" title="Button"/>
+                    <buttonConfiguration key="configuration" style="plain" title="삭제하기"/>
+                    <connections>
+                        <action selector="saveTodo:" destination="-1" eventType="touchUpInside" id="awN-te-FyT"/>
                     </connections>
                 </button>
             </subviews>
@@ -45,10 +60,14 @@
             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
             <constraints>
                 <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="lRp-Qv-84X" secondAttribute="trailing" constant="20" id="4XH-8g-q6O"/>
-                <constraint firstItem="6Bt-5K-cZM" firstAttribute="top" secondItem="fnl-2z-Ty3" secondAttribute="top" constant="80" id="bUO-pc-KX1"/>
+                <constraint firstItem="JuF-6A-a6y" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="bNI-Cc-nf8"/>
+                <constraint firstItem="6Bt-5K-cZM" firstAttribute="top" secondItem="fnl-2z-Ty3" secondAttribute="top" constant="144" id="bUO-pc-KX1"/>
                 <constraint firstItem="6Bt-5K-cZM" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" constant="40" id="dGo-Pu-RmP"/>
+                <constraint firstItem="MYT-Pv-PFh" firstAttribute="top" secondItem="lRp-Qv-84X" secondAttribute="bottom" constant="50" id="ewA-cx-Anf"/>
                 <constraint firstItem="lRp-Qv-84X" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" constant="20" id="hWx-VX-nsP"/>
                 <constraint firstItem="lRp-Qv-84X" firstAttribute="top" secondItem="6Bt-5K-cZM" secondAttribute="bottom" constant="50" id="lo9-2O-iOh"/>
+                <constraint firstItem="MYT-Pv-PFh" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="nKD-gA-Ygd"/>
+                <constraint firstItem="JuF-6A-a6y" firstAttribute="top" secondItem="MYT-Pv-PFh" secondAttribute="bottom" constant="40" id="raR-HO-exe"/>
             </constraints>
             <point key="canvasLocation" x="137.68115942028987" y="153.34821428571428"/>
         </view>
