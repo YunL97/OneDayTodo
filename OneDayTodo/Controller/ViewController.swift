@@ -16,9 +16,9 @@ class ViewController: UIViewController {
     var hidden1 = false
     //앱델리게이트 참조 방법
     let appdelegate = UIApplication.shared.delegate as! AppDelegate
-    
+    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     var todoList = [TodoList]()
-    
+    var todoList1 = [TodoList]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -46,32 +46,67 @@ class ViewController: UIViewController {
     }
 
     
+//    edit 버튼 누르면 -, 3선 나오는거
     override func setEditing(_ editing: Bool, animated: Bool) {
         super.setEditing(editing, animated: animated)
-
+        
+        //여기서 todoList안 넣어 주면 데이터가 꼬인다 왜그러지
+        todoList1 = todoList
         
         if self.todoTableView.isEditing {
             self.todoTableView.setEditing(false, animated: true)
             hidden1 = false
-        } else {
+
+            
+            if todoList1.count != 0{
+            for i in 0...todoList1.count - 1 {
+                let fetchRequest:NSFetchRequest<TodoList> = TodoList.fetchRequest()
+                
+                
+                guard let hasUUID = todoList1[i].uuid else {
+                    return
+                }
+                
+                fetchRequest.predicate = NSPredicate(format: "uuid = %@", hasUUID as CVarArg)
+                
+                
+                do{
+                      let loadeddData = try context.fetch(fetchRequest)
+                    
+                    print("--------------------------------")
+//                    print(loadeddData)
+                    loadeddData.first?.order = Int32(i)
+                    
+//                    print(todoList[i])
+                    let appDelegate = (UIApplication.shared.delegate as! AppDelegate )
+                    
+                    appDelegate.saveContext()
+
+                    fetchData()
+                    todoTableView.reloadData()
+
+                
+            }catch{
+                print(error)
+            }
+                 
+            }
+            }
+        
+        }else {
             self.todoTableView.setEditing(true, animated: true)
                 hidden1 = true
+            
                 }
-        
-        
-        
-//        self.todoTableView.reloadData()
+    
 
     }
 
-    
-    
-    
+
     //데이터 가져오기
     func fetchData() {
         let fetchRequest: NSFetchRequest<TodoList> = TodoList.fetchRequest()
         
-       let context = appdelegate.persistentContainer.viewContext
         
         do {
             //
@@ -131,14 +166,16 @@ extension ViewController:UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "TodoCell", for: indexPath) as! TodoCell
         
-//        todoList.sort(by: {$0.order < $1.order})
+        todoList.sort(by: {$0.order < $1.order})
+        
+        
         cell.titleLabel.text = todoList[indexPath.row].title
 //        cell.threeLine.isHidden = hidden1
         return cell
     }
     
 
-    // + - 반환
+//    // + - 반환
     func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
         if indexPath.row == 0 {
 //               return .insert
@@ -147,18 +184,46 @@ extension ViewController:UITableViewDelegate, UITableViewDataSource {
                return .delete
            }
     }
+
     
-    
-    //
-//    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-//        print("delete1")
-//    }
+    //- 제스쳐로 지우기
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        let fetchRequest:NSFetchRequest<TodoList> = TodoList.fetchRequest()
+        
+        let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+        
+        fetchRequest.predicate = NSPredicate(format: "uuid = %@", todoList[indexPath.row].uuid! as CVarArg)
+        
+        do{
+            let loadedData = try context.fetch(fetchRequest)
+            
+            if let loadFirstData = loadedData.first {
+                    //메모리 상태에 있는거만 지움 그래서 앱 다시키면 있음
+                    context.delete(loadFirstData)
+                
+                //그래서 앱델리게이트 세이브 해주면 된다
+                let appDelegate = (UIApplication.shared.delegate as! AppDelegate )
+                
+                //테이블에 데이터 저장
+                appDelegate.saveContext()
+                self.fetchData()
+                todoTableView.reloadData()
+            }
+        }catch{
+            print(error)
+        }
+    }
     
     
     
     //edit 옮기기
     func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
         print(sourceIndexPath.row, destinationIndexPath.row)
+        
+        var emtodo:TodoList = todoList[sourceIndexPath.row]
+        todoList.remove(at: sourceIndexPath.row)
+        todoList.insert(emtodo, at: destinationIndexPath.row)
+        print(todoList)
         
         
         
