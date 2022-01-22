@@ -18,12 +18,11 @@ class ViewController: UIViewController {
     let appdelegate = UIApplication.shared.delegate as! AppDelegate
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     var todoList = [TodoList]()
-    var todoList1 = [TodoList]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.title = "억지로하는게 아닌 당연히 해야하는것"
+        self.title = "습관 만들기"
         
         self.makeLeftEditButton()
         self.makeRightAddButton()
@@ -47,23 +46,27 @@ class ViewController: UIViewController {
 
     
 //    edit 버튼 누르면 -, 3선 나오는거
+
     override func setEditing(_ editing: Bool, animated: Bool) {
         super.setEditing(editing, animated: animated)
         
-        //여기서 todoList안 넣어 주면 데이터가 꼬인다 왜그러지
-        todoList1 = todoList
+
+        print("bbbbbbbbbbbbbbbbbbb")
+
+
         
         if self.todoTableView.isEditing {
             self.todoTableView.setEditing(false, animated: true)
             hidden1 = false
-
             
-            if todoList1.count != 0{
-            for i in 0...todoList1.count - 1 {
+           
+            if todoList.count != 0{
+            for i in 0...todoList.count - 1 {
+                print(todoList)
                 let fetchRequest:NSFetchRequest<TodoList> = TodoList.fetchRequest()
                 
-                
-                guard let hasUUID = todoList1[i].uuid else {
+                    
+                guard let hasUUID = todoList[i].uuid else {
                     return
                 }
                 
@@ -77,13 +80,15 @@ class ViewController: UIViewController {
 //                    print(loadeddData)
                     loadeddData.first?.order = Int32(i)
                     
-//                    print(todoList[i])
+                    
                     let appDelegate = (UIApplication.shared.delegate as! AppDelegate )
                     
                     appDelegate.saveContext()
-
-                    fetchData()
-                    todoTableView.reloadData()
+                    
+                    //이 fetchData때문에 오류가 나는거였음
+                    //fetchData에서 todoList에 데이터를 담아서 꼬이는거였네ㅜ for문돌때마다 가져와서 데이터가 꼬이는거였음
+//                    fetchData()
+//                    todoTableView.reloadData()
 
                 
             }catch{
@@ -91,6 +96,8 @@ class ViewController: UIViewController {
             }
                  
             }
+                fetchData()
+                todoTableView.reloadData()
             }
         
         }else {
@@ -223,8 +230,8 @@ extension ViewController:UITableViewDelegate, UITableViewDataSource {
         var emtodo:TodoList = todoList[sourceIndexPath.row]
         todoList.remove(at: sourceIndexPath.row)
         todoList.insert(emtodo, at: destinationIndexPath.row)
-        print(todoList)
         
+        print(todoList)
         
         
         
