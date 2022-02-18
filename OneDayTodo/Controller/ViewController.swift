@@ -13,6 +13,8 @@ import CoreData
 class ViewController: UIViewController {
     @IBOutlet weak var todoTableView: UITableView!
     
+    
+    
     var hidden1 = false
     //앱델리게이트 참조 방법
     let appdelegate = UIApplication.shared.delegate as! AppDelegate
@@ -51,94 +53,88 @@ class ViewController: UIViewController {
         super.setEditing(editing, animated: animated)
         
 
-        print("bbbbbbbbbbbbbbbbbbb")
+        
 
-
+        
         
         if self.todoTableView.isEditing {
             self.todoTableView.setEditing(false, animated: true)
             hidden1 = false
             
-           
+            
             if todoList.count != 0{
-            for i in 0...todoList.count - 1 {
-                print(todoList)
-                let fetchRequest:NSFetchRequest<TodoList> = TodoList.fetchRequest()
-                
+                for i in 0...todoList.count - 1 {
+                    print(todoList)
+                    let fetchRequest:NSFetchRequest<TodoList> = TodoList.fetchRequest()
                     
-                guard let hasUUID = todoList[i].uuid else {
-                    return
+                    
+                    guard let hasUUID = todoList[i].uuid else {
+                        return
+                    }
+                    
+                    fetchRequest.predicate = NSPredicate(format: "uuid = %@", hasUUID as CVarArg)
+                    
+                    
+                    do{
+                        let loadeddData = try context.fetch(fetchRequest)
+                        
+                        
+                        //                    print(loadeddData)
+                        loadeddData.first?.order = Int32(i)
+                        
+                        
+                        let appDelegate = (UIApplication.shared.delegate as! AppDelegate )
+                        
+                        appDelegate.saveContext()
+                        
+                        //이 fetchData때문에 오류가 나는거였음
+                        //fetchData에서 todoList에 데이터를 담아서 꼬이는거였네ㅜ for문돌때마다 가져와서 데이터가 꼬이는거였음
+                        //fetchData()
+                        //todoTableView.reloadData()
+                        
+                        
+                    }catch{
+                        print(error)
+                    }
+                    
                 }
-                
-                fetchRequest.predicate = NSPredicate(format: "uuid = %@", hasUUID as CVarArg)
-                
-                
-                do{
-                      let loadeddData = try context.fetch(fetchRequest)
-                    
-                    print("--------------------------------")
-//                    print(loadeddData)
-                    loadeddData.first?.order = Int32(i)
-                    
-                    
-                    let appDelegate = (UIApplication.shared.delegate as! AppDelegate )
-                    
-                    appDelegate.saveContext()
-                    
-                    //이 fetchData때문에 오류가 나는거였음
-                    //fetchData에서 todoList에 데이터를 담아서 꼬이는거였네ㅜ for문돌때마다 가져와서 데이터가 꼬이는거였음
-//                    fetchData()
-//                    todoTableView.reloadData()
-
-                
-            }catch{
-                print(error)
-            }
-                 
-            }
                 fetchData()
                 todoTableView.reloadData()
             }
-        
+            
         }else {
             self.todoTableView.setEditing(true, animated: true)
-                hidden1 = true
+            hidden1 = true
             
-                }
-    
-
+        }
+        
+        
     }
 
 
     //데이터 가져오기
     func fetchData() {
         let fetchRequest: NSFetchRequest<TodoList> = TodoList.fetchRequest()
-        
-        
         do {
             //
             self.todoList = try context.fetch(fetchRequest)
-            
-            
         }catch {
             printContent(error)
         }
-        
-        
     }
     
     
     
     func makeLeftEditButton() {
         self.navigationItem.leftBarButtonItem = self.editButtonItem
-    
+        
     }
     
     //네비게이션 + 버튼 추가
     func makeRightAddButton() {
         let item = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addTodo))
         
-//        item.tintColor = .blue
+        //item.tintColor = .blue
         self.navigationItem.rightBarButtonItem = item
     }
     
@@ -146,7 +142,7 @@ class ViewController: UIViewController {
     func navistatbarColor() {
         let barAppearence = UINavigationBarAppearance()
         barAppearence.backgroundColor = UIColor(red: 20/255, green: 30/255, blue: 40/255, alpha: 0.2)
-    
+        
         self.navigationController?.navigationBar.scrollEdgeAppearance = barAppearence
         self.navigationController?.navigationBar.standardAppearance = barAppearence
     }
@@ -166,7 +162,7 @@ class ViewController: UIViewController {
 extension ViewController:UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-//        print(todoList.count)
+        //        print(todoList.count)
         return todoList.count
     }
     
@@ -177,19 +173,19 @@ extension ViewController:UITableViewDelegate, UITableViewDataSource {
         
         
         cell.titleLabel.text = todoList[indexPath.row].title
-//        cell.threeLine.isHidden = hidden1
+        //        cell.threeLine.isHidden = hidden1
         return cell
     }
     
-
-//    // + - 반환
+    
+    //    // + - 반환
     func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
         if indexPath.row == 0 {
-//               return .insert
+            //               return .insert
             return .delete
-           } else {
-               return .delete
-           }
+        } else {
+            return .delete
+        }
     }
 
     
@@ -205,8 +201,8 @@ extension ViewController:UITableViewDelegate, UITableViewDataSource {
             let loadedData = try context.fetch(fetchRequest)
             
             if let loadFirstData = loadedData.first {
-                    //메모리 상태에 있는거만 지움 그래서 앱 다시키면 있음
-                    context.delete(loadFirstData)
+                //메모리 상태에 있는거만 지움 그래서 앱 다시키면 있음
+                context.delete(loadFirstData)
                 
                 //그래서 앱델리게이트 세이브 해주면 된다
                 let appDelegate = (UIApplication.shared.delegate as! AppDelegate )
@@ -232,16 +228,15 @@ extension ViewController:UITableViewDelegate, UITableViewDataSource {
         todoList.insert(emtodo, at: destinationIndexPath.row)
         
         print(todoList)
-        
-        
-        
-    }
-
     
-//    ---------------------------
+    }
+    
+    
+    //    ---------------------------
     //클릭
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let addVC = AddTodoViewController.init(nibName: "AddTodoViewController", bundle: nil)
+        
         tableView.deselectRow(at: indexPath, animated: true)
         addVC.selectedTodoList = todoList[indexPath.row]
         addVC.delegate = self

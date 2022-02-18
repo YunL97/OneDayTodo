@@ -29,6 +29,8 @@ class AddTodoViewController: UIViewController {
     
     //NSManagedObjectContext
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -77,8 +79,8 @@ class AddTodoViewController: UIViewController {
         object.title = textField.text
         object.uuid = UUID()
         if let ordercount1 = ordercount{
-        object.order = Int32(ordercount1 + 1)
-        print(Int32(ordercount1 + 1))
+        object.order = Int32(ordercount1)
+        print(Int32(ordercount1))
         
         }
         //세이브는 uiapplicationdelegate 에서 가능
