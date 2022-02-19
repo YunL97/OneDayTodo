@@ -13,6 +13,12 @@ import CoreData
 class ViewController: UIViewController {
     @IBOutlet weak var todoTableView: UITableView!
     
+    @IBOutlet weak var resetButton: UIButton!{
+        didSet{
+            resetButton.titleLabel?.font = UIFont.systemFont(ofSize: 5)
+        }
+    }
+    
     
     
     var hidden1 = false
@@ -24,6 +30,7 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+       
         self.title = "습관 만들기"
         
         self.makeLeftEditButton()

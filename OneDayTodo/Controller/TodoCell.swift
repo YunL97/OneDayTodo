@@ -11,11 +11,18 @@ class TodoCell: UITableViewCell {
 
     @IBOutlet weak var titleLabel: UILabel!
     
-    @IBOutlet weak var threeLine: UIImageView!{
-        didSet{
-            threeLine.isHidden = false
-        }
+    @IBAction func didTap(_ sender:UIButton){
+        sender.isSelected.toggle()
+        titleLabel.textColor = .gray
+        
+        titleLabel.attributedText = strikeThrough(titleLabel)
     }
+    
+    func strikeThrough(_ label: UILabel) -> NSAttributedString {
+        let attributeString: NSMutableAttributedString = NSMutableAttributedString(string: label.text ?? "")
+            attributeString.addAttribute(NSAttributedString.Key.strikethroughStyle, value: NSUnderlineStyle.single.rawValue, range: NSMakeRange(0, attributeString.length))
+            return attributeString
+        }
     
     override func awakeFromNib() {
         super.awakeFromNib()

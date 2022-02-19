@@ -71,6 +71,7 @@
                     </view>
                     <navigationItem key="navigationItem" id="faC-xL-BTO"/>
                     <connections>
+                        <outlet property="resetButton" destination="D7U-uK-eFp" id="Ttw-R9-Dox"/>
                         <outlet property="todoTableView" destination="5BN-mm-jvR" id="3FK-PP-XO0"/>
                     </connections>
                 </viewController>
