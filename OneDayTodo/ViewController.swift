@@ -15,11 +15,14 @@ class ViewController: UIViewController {
     
     @IBOutlet weak var resetButton: UIButton!{
         didSet{
-            resetButton.titleLabel?.font = UIFont.systemFont(ofSize: 5)
+            resetButton.titleLabel?.font = .systemFont(ofSize: 25)
         }
     }
     
-    
+    @IBAction func resetButtonClick(_ sender:UIButton){
+        print("aa")
+        
+    }
     
     var hidden1 = false
     //앱델리게이트 참조 방법
@@ -30,7 +33,7 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-       
+        
         self.title = "습관 만들기"
         
         self.makeLeftEditButton()
@@ -44,49 +47,36 @@ class ViewController: UIViewController {
         fetchData()
         
         
-
+        
         
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
-   
+        
     }
-
     
-//    edit 버튼 누르면 -, 3선 나오는거
-
+    
+    //    edit 버튼 누르면 -, 3선 나오는거
+    
     override func setEditing(_ editing: Bool, animated: Bool) {
         super.setEditing(editing, animated: animated)
-        
-
-        
-
-        
         
         if self.todoTableView.isEditing {
             self.todoTableView.setEditing(false, animated: true)
             hidden1 = false
-            
-            
             if todoList.count != 0{
                 for i in 0...todoList.count - 1 {
-                    print(todoList)
+                    //                    print(todoList)
                     let fetchRequest:NSFetchRequest<TodoList> = TodoList.fetchRequest()
-                    
-                    
                     guard let hasUUID = todoList[i].uuid else {
                         return
                     }
-                    
                     fetchRequest.predicate = NSPredicate(format: "uuid = %@", hasUUID as CVarArg)
-                    
-                    
                     do{
                         let loadeddData = try context.fetch(fetchRequest)
                         
-                        
-                        //                    print(loadeddData)
+                        //                                            print(loadeddData)
                         loadeddData.first?.order = Int32(i)
                         
                         
@@ -95,7 +85,7 @@ class ViewController: UIViewController {
                         appDelegate.saveContext()
                         
                         //이 fetchData때문에 오류가 나는거였음
-                        //fetchData에서 todoList에 데이터를 담아서 꼬이는거였네ㅜ for문돌때마다 가져와서 데이터가 꼬이는거였음
+                        //fetchData에서 todoList에 데이터를 담아서 꼬이는거였네 for문돌때마다 가져와서 데이터가 꼬이는거였음
                         //fetchData()
                         //todoTableView.reloadData()
                         
@@ -117,8 +107,8 @@ class ViewController: UIViewController {
         
         
     }
-
-
+    
+    
     //데이터 가져오기
     func fetchData() {
         let fetchRequest: NSFetchRequest<TodoList> = TodoList.fetchRequest()
@@ -163,7 +153,7 @@ class ViewController: UIViewController {
     }
     
     
-   
+    
 }
 
 extension ViewController:UITableViewDelegate, UITableViewDataSource {
@@ -178,8 +168,21 @@ extension ViewController:UITableViewDelegate, UITableViewDataSource {
         
         todoList.sort(by: {$0.order < $1.order})
         
-        
+        cell.tab = todoList[indexPath.row].check
         cell.titleLabel.text = todoList[indexPath.row].title
+        
+        if cell.tab == false {
+            cell.tabButton.setTitle("false", for: .normal)
+            cell.tab1 = false
+        }else {
+            cell.tabButton.setTitle("true", for: .normal)
+            cell.titleLabel.textColor = .gray
+            cell.titleLabel.attributedText = cell.strikeThrough(cell.titleLabel)
+            cell.tab1 = true
+        }
+        cell.uuid = todoList[indexPath.row].uuid
+        cell.title = todoList[indexPath.row].title
+        
         //        cell.threeLine.isHidden = hidden1
         return cell
     }
@@ -194,12 +197,11 @@ extension ViewController:UITableViewDelegate, UITableViewDataSource {
             return .delete
         }
     }
-
+    
     
     //- 제스쳐로 지우기
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         let fetchRequest:NSFetchRequest<TodoList> = TodoList.fetchRequest()
-        
         let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
         
         fetchRequest.predicate = NSPredicate(format: "uuid = %@", todoList[indexPath.row].uuid! as CVarArg)
@@ -235,7 +237,7 @@ extension ViewController:UITableViewDelegate, UITableViewDataSource {
         todoList.insert(emtodo, at: destinationIndexPath.row)
         
         print(todoList)
-    
+        
     }
     
     
