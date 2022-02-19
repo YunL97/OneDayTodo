@@ -34,6 +34,18 @@
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
+                                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9XA-Af-LgN">
+                                                    <rect key="frame" x="340" y="31" width="24" height="22"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                                    <state key="normal" image="checkmark.rectangle" catalog="system">
+                                                        <color key="titleColor" systemColor="labelColor"/>
+                                                    </state>
+                                                    <state key="selected" image="checkmark.rectangle.fill" catalog="system"/>
+                                                    <connections>
+                                                        <action selector="didTap:" destination="Eb7-j4-Xoz" eventType="touchUpInside" id="HsD-2o-lOC"/>
+                                                    </connections>
+                                                </button>
                                             </subviews>
                                             <constraints>
                                                 <constraint firstItem="6RI-k7-TjW" firstAttribute="centerY" secondItem="zj9-Tg-r2I" secondAttribute="centerY" id="bgI-7h-eGQ"/>
@@ -52,9 +64,13 @@
                                 <constraints>
                                     <constraint firstAttribute="height" constant="75" id="hKq-8k-Lmx"/>
                                 </constraints>
+                                <fontDescription key="fontDescription" name=".AppleSystemUIFont" family=".AppleSystemUIFont" pointSize="15"/>
                                 <color key="tintColor" systemColor="systemGroupedBackgroundColor"/>
-                                <state key="normal" title="Button"/>
-                                <buttonConfiguration key="configuration" style="plain" title="하루 시작" buttonSize="large"/>
+                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                <state key="normal" title="하루 시작"/>
+                                <connections>
+                                    <action selector="resetButtonClick:" destination="BYZ-38-t0r" eventType="touchUpInside" id="SWV-pg-PvR"/>
+                                </connections>
                             </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
@@ -71,13 +87,13 @@
                     </view>
                     <navigationItem key="navigationItem" id="faC-xL-BTO"/>
                     <connections>
-                        <outlet property="resetButton" destination="D7U-uK-eFp" id="Ttw-R9-Dox"/>
+                        <outlet property="resetButton" destination="D7U-uK-eFp" id="cGQ-Pw-mnN"/>
                         <outlet property="todoTableView" destination="5BN-mm-jvR" id="3FK-PP-XO0"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1000.0000000000001" y="138.61607142857142"/>
+            <point key="canvasLocation" x="1000" y="146"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="c5L-KC-BFt">
@@ -99,9 +115,14 @@
         </scene>
     </scenes>
     <resources>
+        <image name="checkmark.rectangle" catalog="system" width="128" height="93"/>
+        <image name="checkmark.rectangle.fill" catalog="system" width="128" height="93"/>
         <namedColor name="AccentColor">
             <color red="0.0" green="0.46000000000000002" blue="0.89000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
+        <systemColor name="labelColor">
+            <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
