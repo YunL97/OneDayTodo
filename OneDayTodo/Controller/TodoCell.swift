@@ -6,16 +6,75 @@
 //
 
 import UIKit
+import CoreData
 
 class TodoCell: UITableViewCell {
 
+    
+    var title:String?
+    var uuid:UUID?
+    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+    
+    var tab:Bool?
+    var tab1:Bool?
+    
     @IBOutlet weak var titleLabel: UILabel!
     
+    @IBOutlet weak var tabButton: UIButton!
+    
+    
     @IBAction func didTap(_ sender:UIButton){
-        sender.isSelected.toggle()
-        titleLabel.textColor = .gray
+//        sender.isSelected.toggle()
         
+        if tab1 == false{
+        titleLabel.textColor = .gray
+        tabButton.setTitle("true", for: .normal)
         titleLabel.attributedText = strikeThrough(titleLabel)
+        tab1 = true
+        }else {
+            tab1 = false
+            tabButton.setTitle("false", for: .normal)
+            
+            
+            titleLabel.attributedText = .none
+            titleLabel.text = title!
+            titleLabel.textColor = .black
+            print("aaa\(title!)")
+        }
+        
+        
+        guard let hasUUID = uuid else {
+            return
+        }
+        
+        // todolist 테이블 데이터 불러올 준비
+        let fetchRequest:NSFetchRequest<TodoList> = TodoList.fetchRequest()
+        
+        //todolist 셀렉된 튜플만 가져오기
+        fetchRequest.predicate = NSPredicate(format: "uuid = %@", hasUUID as CVarArg)
+        
+        //컨텍스트에서 fetchRequest 조건이 걸린거를 가져온다
+        do{
+              let loadeddData = try context.fetch(fetchRequest)
+            loadeddData.first?.check = tab1 ?? false
+            
+            //세이브는 uiapplicationdelegate 에서 가능
+            let appDelegate = (UIApplication.shared.delegate as! AppDelegate )
+            
+            //테이블에 데이터 저장
+            appDelegate.saveContext()
+            
+            //함수가 끝날 때 프로토콜함수까지 호출하게 만듬, viewcontroller 에서 didfinishData함수가 정의 되어 있음
+//            delegate?.didFinishSaveData()
+
+
+         
+        
+    }catch{
+        print(error)
+    }
+        
+        
     }
     
     func strikeThrough(_ label: UILabel) -> NSAttributedString {
@@ -26,6 +85,8 @@ class TodoCell: UITableViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
+        
+       
         // Initialization code
     }
 
