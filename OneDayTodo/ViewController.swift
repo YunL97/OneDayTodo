@@ -172,7 +172,8 @@ extension ViewController:UITableViewDelegate, UITableViewDataSource {
         cell.titleLabel.text = todoList[indexPath.row].title
         
         if cell.tab == false {
-            cell.tabButton.setTitle("false", for: .normal)
+//            cell.tabButton.setTitle("false", for: .normal)
+            cell.tabButton.setImage(UIImage(systemName: "heart"), for: .normal)
             cell.tab1 = false
         }else {
             cell.tabButton.setTitle("true", for: .normal)
