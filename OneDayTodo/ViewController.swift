@@ -58,7 +58,6 @@ class ViewController: UIViewController {
     
     
     //    edit 버튼 누르면 -, 3선 나오는거
-    
     override func setEditing(_ editing: Bool, animated: Bool) {
         super.setEditing(editing, animated: animated)
         
@@ -78,7 +77,6 @@ class ViewController: UIViewController {
                         
                         //                                            print(loadeddData)
                         loadeddData.first?.order = Int32(i)
-                        
                         
                         let appDelegate = (UIApplication.shared.delegate as! AppDelegate )
                         
@@ -102,6 +100,8 @@ class ViewController: UIViewController {
         }else {
             self.todoTableView.setEditing(true, animated: true)
             hidden1 = true
+            fetchData()
+            todoTableView.reloadData()
             
         }
         
@@ -165,25 +165,38 @@ extension ViewController:UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "TodoCell", for: indexPath) as! TodoCell
+        cell.titleLabel.attributedText = nil
+        cell.titleLabel.text = nil
         
         todoList.sort(by: {$0.order < $1.order})
         
         cell.tab = todoList[indexPath.row].check
+
         cell.titleLabel.text = todoList[indexPath.row].title
         
         if cell.tab == false {
-//            cell.tabButton.setTitle("false", for: .normal)
-            cell.tabButton.setImage(UIImage(systemName: "heart"), for: .normal)
-            cell.tab1 = false
+                cell.tabButton.setImage(UIImage(systemName: "checkmark.square"), for: .normal)
+            if hidden1 == true{
+                cell.tabButton.isHidden = true
+            }else {
+                cell.tabButton.isHidden = false
+            }
+            cell.titleLabel.textColor = .black
+            cell.titleLabel.attributedText = nil
+            cell.titleLabel.text = todoList[indexPath.row].title
         }else {
-            cell.tabButton.setTitle("true", for: .normal)
+                cell.tabButton.setImage(UIImage(systemName: "checkmark.square.fill"), for: .normal)
+            if hidden1 == true{
+                cell.tabButton.isHidden = true
+            }else {
+                cell.tabButton.isHidden = false
+            }
             cell.titleLabel.textColor = .gray
             cell.titleLabel.attributedText = cell.strikeThrough(cell.titleLabel)
-            cell.tab1 = true
         }
         cell.uuid = todoList[indexPath.row].uuid
         cell.title = todoList[indexPath.row].title
-        
+        print("\(cell.uuid)\(cell.title)\(cell.tab)")
         //        cell.threeLine.isHidden = hidden1
         return cell
     }
