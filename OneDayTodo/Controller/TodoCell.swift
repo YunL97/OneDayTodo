@@ -17,34 +17,39 @@ class TodoCell: UITableViewCell {
     
     var tab:Bool?
     var tab1:Bool?
-    
+
     @IBOutlet weak var titleLabel: UILabel!
     
-    @IBOutlet weak var tabButton: UIButton!
+    @IBOutlet weak var tabButton: UIButton!{
+        didSet{
+            tabButton.contentMode = .scaleToFill
+            tabButton.imageEdgeInsets = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
+        }
+    }
     
     
     @IBAction func didTap(_ sender:UIButton){
 //        sender.isSelected.toggle()
         
-        if tab1 == false{
+        if tab == false{
         titleLabel.textColor = .gray
-        tabButton.setTitle("true", for: .normal)
+            tabButton.setImage(UIImage(systemName: "checkmark.square.fill"), for: .normal)
         titleLabel.attributedText = strikeThrough(titleLabel)
-        tab1 = true
+        tab = true
         }else {
-            tab1 = false
-            tabButton.setTitle("false", for: .normal)
+            tab = false
+            tabButton.setImage(UIImage(systemName: "checkmark.square"), for: .normal)
             
             
-            titleLabel.attributedText = .none
+            titleLabel.attributedText = nil
             titleLabel.text = title!
             titleLabel.textColor = .black
             print("aaa\(title!)")
         }
         
-        
         guard let hasUUID = uuid else {
             return
+            
         }
         
         // todolist 테이블 데이터 불러올 준비
@@ -56,7 +61,7 @@ class TodoCell: UITableViewCell {
         //컨텍스트에서 fetchRequest 조건이 걸린거를 가져온다
         do{
               let loadeddData = try context.fetch(fetchRequest)
-            loadeddData.first?.check = tab1 ?? false
+            loadeddData.first?.check = tab ?? false
             
             //세이브는 uiapplicationdelegate 에서 가능
             let appDelegate = (UIApplication.shared.delegate as! AppDelegate )
@@ -85,7 +90,6 @@ class TodoCell: UITableViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        
        
         // Initialization code
     }
