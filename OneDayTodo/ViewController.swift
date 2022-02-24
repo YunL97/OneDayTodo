@@ -56,7 +56,47 @@ class ViewController: UIViewController {
         
     }
     
+    @IBAction func resetButtonAction(_ sender:UIButton){
+        for i in 0...todoList.count - 1 {
+            
+        
+        if todoList.count != 0{
+            for i in 0...todoList.count - 1 {
+                //                    print(todoList)
+                let fetchRequest:NSFetchRequest<TodoList> = TodoList.fetchRequest()
+                guard let hasUUID = todoList[i].uuid else {
+                    return
+                }
+                fetchRequest.predicate = NSPredicate(format: "uuid = %@", hasUUID as CVarArg)
+                do{
+                    let loadeddData = try context.fetch(fetchRequest)
+                    
+                    //                                            print(loadeddData)
+                    loadeddData.first?.check = false
+                    
+                    let appDelegate = (UIApplication.shared.delegate as! AppDelegate )
+                    
+                    appDelegate.saveContext()
+                    
+                    //이 fetchData때문에 오류가 나는거였음
+                    //fetchData에서 todoList에 데이터를 담아서 꼬이는거였네 for문돌때마다 가져와서 데이터가 꼬이는거였음
+                    //fetchData()
+                    //todoTableView.reloadData()
+                    
+                    
+                }catch{
+                    print(error)
+                }
+                
+            }
+        }
+    }
+        fetchData()
+        todoTableView.reloadData()
+    }
     
+    
+//        sender.isSelected.toggle()
     //    edit 버튼 누르면 -, 3선 나오는거
     override func setEditing(_ editing: Bool, animated: Bool) {
         super.setEditing(editing, animated: animated)
@@ -198,6 +238,10 @@ extension ViewController:UITableViewDelegate, UITableViewDataSource {
         cell.title = todoList[indexPath.row].title
         print("\(cell.uuid)\(cell.title)\(cell.tab)")
         //        cell.threeLine.isHidden = hidden1
+//        cell.tabButton.contentMode = .scaleToFill
+//        cell.tabButton.bounds = CGRect(x: 0, y: 0, width: 30, height: 30)
+//        cell.tabButton.sizeToFit()
+//        cell.tabButton.imageView?.contentMode = .scaleAspectFit
         return cell
     }
     
