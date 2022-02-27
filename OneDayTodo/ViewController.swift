@@ -57,9 +57,7 @@ class ViewController: UIViewController {
     }
     
     @IBAction func resetButtonAction(_ sender:UIButton){
-        for i in 0...todoList.count - 1 {
             
-        
         if todoList.count != 0{
             for i in 0...todoList.count - 1 {
                 //                    print(todoList)
@@ -89,10 +87,11 @@ class ViewController: UIViewController {
                 }
                 
             }
-        }
-    }
+        
+
         fetchData()
         todoTableView.reloadData()
+    }
     }
     
     
@@ -156,7 +155,7 @@ class ViewController: UIViewController {
             //
             self.todoList = try context.fetch(fetchRequest)
         }catch {
-            printContent(error)
+            print(error)
         }
     }
     
