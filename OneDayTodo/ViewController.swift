@@ -16,13 +16,10 @@ class ViewController: UIViewController {
     @IBOutlet weak var resetButton: UIButton!{
         didSet{
             resetButton.titleLabel?.font = .systemFont(ofSize: 25)
+            
         }
     }
     
-    @IBAction func resetButtonClick(_ sender:UIButton){
-        print("aa")
-        
-    }
     
     var hidden1 = false
     //앱델리게이트 참조 방법
@@ -150,12 +147,32 @@ class ViewController: UIViewController {
     
     //데이터 가져오기
     func fetchData() {
+                
+        
         let fetchRequest: NSFetchRequest<TodoList> = TodoList.fetchRequest()
         do {
             //
             self.todoList = try context.fetch(fetchRequest)
         }catch {
             print(error)
+        }
+        
+        var checkcount = 0
+        if todoList.count != 0{
+            for i in 0...todoList.count - 1 {
+                if todoList[i].check == true{
+                    checkcount = checkcount + 1
+                }
+            }
+        }
+        print(checkcount)
+        if todoList.count == 0 || checkcount == 0{
+            print("aa")
+            resetButton.isEnabled = false
+            resetButton.backgroundColor = .gray
+        }else {
+            resetButton.isEnabled = true
+            resetButton.backgroundColor = .systemBlue
         }
     }
     
@@ -204,13 +221,17 @@ extension ViewController:UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "TodoCell", for: indexPath) as! TodoCell
+        cell.delegate = self
         cell.titleLabel.attributedText = nil
         cell.titleLabel.text = nil
         
         todoList.sort(by: {$0.order < $1.order})
         
         cell.tab = todoList[indexPath.row].check
-
+        
+        
+        
+        
         cell.titleLabel.text = todoList[indexPath.row].title
         
         if cell.tab == false {
