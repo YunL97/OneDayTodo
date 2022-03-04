@@ -80,6 +80,7 @@ class AddTodoViewController: UIViewController {
         object.uuid = UUID()
         if let ordercount1 = ordercount{
         object.order = Int32(ordercount1)
+        object.check = false
         print(Int32(ordercount1))
         
         }

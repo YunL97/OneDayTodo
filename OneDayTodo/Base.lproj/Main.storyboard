@@ -29,30 +29,33 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6RI-k7-TjW">
-                                                    <rect key="frame" x="40" y="32" width="41.5" height="20.5"/>
+                                                    <rect key="frame" x="40" y="32" width="294" height="20.5"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9XA-Af-LgN">
-                                                    <rect key="frame" x="340" y="31" width="24" height="22"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fBB-xk-SH3">
+                                                    <rect key="frame" x="354" y="17" width="50" height="50"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="50" id="AwP-u2-ek6"/>
+                                                        <constraint firstAttribute="width" constant="50" id="hJH-pU-4iD"/>
+                                                    </constraints>
                                                     <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                                    <state key="normal" image="checkmark.rectangle" catalog="system">
-                                                        <color key="titleColor" systemColor="labelColor"/>
-                                                    </state>
-                                                    <state key="selected" image="checkmark.rectangle.fill" catalog="system"/>
                                                     <connections>
-                                                        <action selector="didTap:" destination="Eb7-j4-Xoz" eventType="touchUpInside" id="HsD-2o-lOC"/>
+                                                        <action selector="didTap:" destination="Eb7-j4-Xoz" eventType="touchUpInside" id="fqA-TB-wUV"/>
                                                     </connections>
                                                 </button>
                                             </subviews>
                                             <constraints>
+                                                <constraint firstItem="fBB-xk-SH3" firstAttribute="trailing" secondItem="zj9-Tg-r2I" secondAttribute="trailingMargin" constant="10" id="8V8-ab-G2d"/>
                                                 <constraint firstItem="6RI-k7-TjW" firstAttribute="centerY" secondItem="zj9-Tg-r2I" secondAttribute="centerY" id="bgI-7h-eGQ"/>
                                                 <constraint firstItem="6RI-k7-TjW" firstAttribute="leading" secondItem="zj9-Tg-r2I" secondAttribute="leadingMargin" constant="20" id="cJN-tO-yZi"/>
+                                                <constraint firstItem="fBB-xk-SH3" firstAttribute="leading" secondItem="6RI-k7-TjW" secondAttribute="trailing" constant="20" id="nJq-a3-DXj"/>
+                                                <constraint firstItem="fBB-xk-SH3" firstAttribute="centerY" secondItem="zj9-Tg-r2I" secondAttribute="centerY" id="uvg-iO-KTX"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
+                                            <outlet property="tabButton" destination="fBB-xk-SH3" id="bFV-WA-av0"/>
                                             <outlet property="titleLabel" destination="6RI-k7-TjW" id="5uI-xa-7vk"/>
                                         </connections>
                                     </tableViewCell>
@@ -69,7 +72,7 @@
                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                 <state key="normal" title="하루 시작"/>
                                 <connections>
-                                    <action selector="resetButtonClick:" destination="BYZ-38-t0r" eventType="touchUpInside" id="SWV-pg-PvR"/>
+                                    <action selector="resetButtonAction:" destination="BYZ-38-t0r" eventType="touchUpInside" id="BvQ-aU-SHo"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -115,14 +118,9 @@
         </scene>
     </scenes>
     <resources>
-        <image name="checkmark.rectangle" catalog="system" width="128" height="93"/>
-        <image name="checkmark.rectangle.fill" catalog="system" width="128" height="93"/>
         <namedColor name="AccentColor">
             <color red="0.0" green="0.46000000000000002" blue="0.89000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
-        <systemColor name="labelColor">
-            <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

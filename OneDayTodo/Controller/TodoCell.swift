@@ -8,8 +8,11 @@
 import UIKit
 import CoreData
 
-class TodoCell: UITableViewCell {
 
+
+class TodoCell: UITableViewCell {
+    
+    weak var delegate: TodoDetailViewControllerDelegate?
     
     var title:String?
     var uuid:UUID?
@@ -20,12 +23,7 @@ class TodoCell: UITableViewCell {
 
     @IBOutlet weak var titleLabel: UILabel!
     
-    @IBOutlet weak var tabButton: UIButton!{
-        didSet{
-            tabButton.contentMode = .scaleToFill
-            tabButton.imageEdgeInsets = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
-        }
-    }
+    @IBOutlet weak var tabButton: UIButton!
     
     
     @IBAction func didTap(_ sender:UIButton){
@@ -72,7 +70,7 @@ class TodoCell: UITableViewCell {
             //함수가 끝날 때 프로토콜함수까지 호출하게 만듬, viewcontroller 에서 didfinishData함수가 정의 되어 있음
 //            delegate?.didFinishSaveData()
 
-
+            delegate?.didFinishSaveData()
          
         
     }catch{
