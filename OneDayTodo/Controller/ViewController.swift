@@ -16,10 +16,19 @@ class ViewController: UIViewController {
     @IBOutlet weak var resetButton: UIButton!{
         didSet{
             resetButton.titleLabel?.font = .systemFont(ofSize: 25)
-            
         }
     }
+    private var todoListVM: TodoListViewModel!
     
+    private func setup() {
+        self.title = "습관 만들기"
+        self.makeLeftEditButton()
+        self.makeRightAddButton()
+        self.navistatbarColor()
+        todoTableView.delegate = self
+        todoTableView.dataSource = self
+        fetchData()
+    }
     
     var hidden1 = false
     //앱델리게이트 참조 방법
@@ -30,31 +39,11 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        
-        self.title = "습관 만들기"
-        
-        self.makeLeftEditButton()
-        self.makeRightAddButton()
-        self.navistatbarColor()
-        
-        todoTableView.delegate = self
-        todoTableView.dataSource = self
-        
-        
-        fetchData()
-        
-        
-        
-        
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(true)
+        setup()
         
     }
     
     @IBAction func resetButtonAction(_ sender:UIButton){
-            
         if todoList.count != 0{
             for i in 0...todoList.count - 1 {
                 //                    print(todoList)
@@ -84,15 +73,15 @@ class ViewController: UIViewController {
                 }
                 
             }
-        
-
-        fetchData()
-        todoTableView.reloadData()
-    }
+            
+            
+            fetchData()
+            todoTableView.reloadData()
+        }
     }
     
     
-//        sender.isSelected.toggle()
+    //        sender.isSelected.toggle()
     //    edit 버튼 누르면 -, 3선 나오는거
     override func setEditing(_ editing: Bool, animated: Bool) {
         super.setEditing(editing, animated: animated)
@@ -147,16 +136,17 @@ class ViewController: UIViewController {
     
     //데이터 가져오기
     func fetchData() {
-                
-        
         let fetchRequest: NSFetchRequest<TodoList> = TodoList.fetchRequest()
         do {
             //
             self.todoList = try context.fetch(fetchRequest)
+            
+            //modelView 데이터 넣어보기
+            self.todoListVM = TodoListViewModel(todoList: todoList)
         }catch {
             print(error)
         }
-        
+        //하루버튼
         var checkcount = 0
         if todoList.count != 0{
             for i in 0...todoList.count - 1 {
@@ -235,7 +225,7 @@ extension ViewController:UITableViewDelegate, UITableViewDataSource {
         cell.titleLabel.text = todoList[indexPath.row].title
         
         if cell.tab == false {
-                cell.tabButton.setImage(UIImage(systemName: "checkmark.square"), for: .normal)
+            cell.tabButton.setImage(UIImage(systemName: "checkmark.square"), for: .normal)
             if hidden1 == true{
                 cell.tabButton.isHidden = true
             }else {
@@ -245,7 +235,7 @@ extension ViewController:UITableViewDelegate, UITableViewDataSource {
             cell.titleLabel.attributedText = nil
             cell.titleLabel.text = todoList[indexPath.row].title
         }else {
-                cell.tabButton.setImage(UIImage(systemName: "checkmark.square.fill"), for: .normal)
+            cell.tabButton.setImage(UIImage(systemName: "checkmark.square.fill"), for: .normal)
             if hidden1 == true{
                 cell.tabButton.isHidden = true
             }else {
@@ -258,10 +248,10 @@ extension ViewController:UITableViewDelegate, UITableViewDataSource {
         cell.title = todoList[indexPath.row].title
         print("\(cell.uuid)\(cell.title)\(cell.tab)")
         //        cell.threeLine.isHidden = hidden1
-//        cell.tabButton.contentMode = .scaleToFill
-//        cell.tabButton.bounds = CGRect(x: 0, y: 0, width: 30, height: 30)
-//        cell.tabButton.sizeToFit()
-//        cell.tabButton.imageView?.contentMode = .scaleAspectFit
+        //        cell.tabButton.contentMode = .scaleToFill
+        //        cell.tabButton.bounds = CGRect(x: 0, y: 0, width: 30, height: 30)
+        //        cell.tabButton.sizeToFit()
+        //        cell.tabButton.imageView?.contentMode = .scaleAspectFit
         return cell
     }
     
@@ -330,6 +320,7 @@ extension ViewController:UITableViewDelegate, UITableViewDataSource {
         self.present(addVC, animated: true, completion: nil)
     }
     
+    //cell height
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 60
     }
