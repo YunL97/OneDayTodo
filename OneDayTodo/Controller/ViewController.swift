@@ -38,111 +38,40 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        self.todoListVM = TodoListViewModel(context: context)
         setup()
-        
     }
     
     @IBAction func resetButtonAction(_ sender:UIButton){
-        if todoList.count != 0{
-            for i in 0...todoList.count - 1 {
-                //                    print(todoList)
-                let fetchRequest:NSFetchRequest<TodoList> = TodoList.fetchRequest()
-                guard let hasUUID = todoList[i].uuid else {
-                    return
-                }
-                fetchRequest.predicate = NSPredicate(format: "uuid = %@", hasUUID as CVarArg)
-                do{
-                    let loadeddData = try context.fetch(fetchRequest)
-                    
-                    //                                            print(loadeddData)
-                    loadeddData.first?.check = false
-                    
-                    let appDelegate = (UIApplication.shared.delegate as! AppDelegate )
-                    
-                    appDelegate.saveContext()
-                    
-                    //이 fetchData때문에 오류가 나는거였음
-                    //fetchData에서 todoList에 데이터를 담아서 꼬이는거였네 for문돌때마다 가져와서 데이터가 꼬이는거였음
-                    //fetchData()
-                    //todoTableView.reloadData()
-                    
-                    
-                }catch{
-                    print(error)
-                }
-                
-            }
-            
-            
-            fetchData()
-            todoTableView.reloadData()
-        }
+        todoListVM.resetCount(todoList)
+        fetchData()
+        todoTableView.reloadData()
     }
-    
-    
     //        sender.isSelected.toggle()
     //    edit 버튼 누르면 -, 3선 나오는거
     override func setEditing(_ editing: Bool, animated: Bool) {
         super.setEditing(editing, animated: animated)
-        
         if self.todoTableView.isEditing {
             self.todoTableView.setEditing(false, animated: true)
             hidden1 = false
             if todoList.count != 0{
-                for i in 0...todoList.count - 1 {
-                    //                    print(todoList)
-                    let fetchRequest:NSFetchRequest<TodoList> = TodoList.fetchRequest()
-                    guard let hasUUID = todoList[i].uuid else {
-                        return
-                    }
-                    fetchRequest.predicate = NSPredicate(format: "uuid = %@", hasUUID as CVarArg)
-                    do{
-                        let loadeddData = try context.fetch(fetchRequest)
-                        
-                        //                                            print(loadeddData)
-                        loadeddData.first?.order = Int32(i)
-                        
-                        let appDelegate = (UIApplication.shared.delegate as! AppDelegate )
-                        
-                        appDelegate.saveContext()
-                        
-                        //이 fetchData때문에 오류가 나는거였음
-                        //fetchData에서 todoList에 데이터를 담아서 꼬이는거였네 for문돌때마다 가져와서 데이터가 꼬이는거였음
-                        //fetchData()
-                        //todoTableView.reloadData()
-                        
-                        
-                    }catch{
-                        print(error)
-                    }
-                    
-                }
-                fetchData()
-                todoTableView.reloadData()
+                self.todoListVM.editMove(todoList)
             }
-            
         }else {
             self.todoTableView.setEditing(true, animated: true)
             hidden1 = true
-            fetchData()
-            todoTableView.reloadData()
-            
         }
-        
-        
+        fetchData()
+        todoTableView.reloadData()
     }
-    
     
     //데이터 가져오기
     func fetchData() {
         let fetchRequest: NSFetchRequest<TodoList> = TodoList.fetchRequest()
         do {
-            //
             self.todoList = try context.fetch(fetchRequest)
-            
             //modelView 데이터 넣어보기
-            self.todoListVM = TodoListViewModel(todoList: todoList)
+
         }catch {
             print(error)
         }
@@ -155,7 +84,6 @@ class ViewController: UIViewController {
                 }
             }
         }
-        print(checkcount)
         if todoList.count == 0 || checkcount == 0{
             print("aa")
             resetButton.isEnabled = false
@@ -165,41 +93,6 @@ class ViewController: UIViewController {
             resetButton.backgroundColor = .systemBlue
         }
     }
-    
-    
-    
-    func makeLeftEditButton() {
-        self.navigationItem.leftBarButtonItem = self.editButtonItem
-        
-    }
-    
-    //네비게이션 + 버튼 추가
-    func makeRightAddButton() {
-        let item = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addTodo))
-        
-        //item.tintColor = .blue
-        self.navigationItem.rightBarButtonItem = item
-    }
-    
-    //네비게이션바, 스테이터스바 색 변경
-    func navistatbarColor() {
-        let barAppearence = UINavigationBarAppearance()
-        barAppearence.backgroundColor = UIColor(red: 20/255, green: 30/255, blue: 40/255, alpha: 0.2)
-        
-        self.navigationController?.navigationBar.scrollEdgeAppearance = barAppearence
-        self.navigationController?.navigationBar.standardAppearance = barAppearence
-    }
-    
-    @objc func addTodo() {
-        print("add");
-        let addVC = AddTodoViewController.init(nibName: "AddTodoViewController", bundle: nil)
-        addVC.ordercount = todoList.count
-        addVC.delegate = self
-        self.present(addVC, animated: true, completion: nil)
-    }
-    
-    
-    
 }
 
 extension ViewController:UITableViewDelegate, UITableViewDataSource {
@@ -218,12 +111,8 @@ extension ViewController:UITableViewDelegate, UITableViewDataSource {
         todoList.sort(by: {$0.order < $1.order})
         
         cell.tab = todoList[indexPath.row].check
-        
-        
-        
-        
         cell.titleLabel.text = todoList[indexPath.row].title
-        
+    
         if cell.tab == false {
             cell.tabButton.setImage(UIImage(systemName: "checkmark.square"), for: .normal)
             if hidden1 == true{
@@ -247,11 +136,6 @@ extension ViewController:UITableViewDelegate, UITableViewDataSource {
         cell.uuid = todoList[indexPath.row].uuid
         cell.title = todoList[indexPath.row].title
         print("\(cell.uuid)\(cell.title)\(cell.tab)")
-        //        cell.threeLine.isHidden = hidden1
-        //        cell.tabButton.contentMode = .scaleToFill
-        //        cell.tabButton.bounds = CGRect(x: 0, y: 0, width: 30, height: 30)
-        //        cell.tabButton.sizeToFit()
-        //        cell.tabButton.imageView?.contentMode = .scaleAspectFit
         return cell
     }
     
@@ -265,8 +149,7 @@ extension ViewController:UITableViewDelegate, UITableViewDataSource {
             return .delete
         }
     }
-    
-    
+
     //- 제스쳐로 지우기
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         let fetchRequest:NSFetchRequest<TodoList> = TodoList.fetchRequest()
@@ -276,11 +159,9 @@ extension ViewController:UITableViewDelegate, UITableViewDataSource {
         
         do{
             let loadedData = try context.fetch(fetchRequest)
-            
             if let loadFirstData = loadedData.first {
                 //메모리 상태에 있는거만 지움 그래서 앱 다시키면 있음
                 context.delete(loadFirstData)
-                
                 //그래서 앱델리게이트 세이브 해주면 된다
                 let appDelegate = (UIApplication.shared.delegate as! AppDelegate )
                 
@@ -296,7 +177,7 @@ extension ViewController:UITableViewDelegate, UITableViewDataSource {
     
     
     
-    //edit 옮기기
+    //edit 옮기기 , edit 눌렀을때 반응
     func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
         print(sourceIndexPath.row, destinationIndexPath.row)
         
@@ -335,3 +216,36 @@ extension ViewController:TodoDetailViewControllerDelegate {
     
 }
 
+
+//ui
+extension ViewController{
+    func makeLeftEditButton() {
+        self.navigationItem.leftBarButtonItem = self.editButtonItem
+    }
+    
+    //네비게이션 + 버튼 추가
+    func makeRightAddButton() {
+        let item = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addTodo))
+        
+        //item.tintColor = .blue
+        self.navigationItem.rightBarButtonItem = item
+    }
+    
+    //네비게이션바, 스테이터스바 색 변경
+    func navistatbarColor() {
+        let barAppearence = UINavigationBarAppearance()
+        barAppearence.backgroundColor = UIColor(red: 20/255, green: 30/255, blue: 40/255, alpha: 0.2)
+        
+        self.navigationController?.navigationBar.scrollEdgeAppearance = barAppearence
+        self.navigationController?.navigationBar.standardAppearance = barAppearence
+    }
+    
+    @objc func addTodo() {
+        print("add");
+        let addVC = AddTodoViewController.init(nibName: "AddTodoViewController", bundle: nil)
+        addVC.ordercount = todoList.count
+        addVC.delegate = self
+        self.present(addVC, animated: true, completion: nil)
+    }
+    
+}
